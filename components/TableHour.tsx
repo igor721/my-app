@@ -1,6 +1,8 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
+
+const dias = ['Horário', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
 const horario = [
   ['07:00 – 07:50', 'Matemática', 'Português', 'Geografia', 'Ciências', 'Inglês'],
   ['07:50 – 08:40', 'Matemática', 'Português', 'Geografia', 'Ciências', 'Inglês'],
@@ -10,13 +12,10 @@ const horario = [
   ['10:40 – 11:30', 'Redação', 'Matemática', 'Ciências', 'Geografia', 'História'],
 ];
 
-const dias = ['Horário', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
-
 const HorarioAulas = () => {
   return (
     <ScrollView horizontal>
       <View style={styles.container}>
-        {/* Cabeçalho */}
         <View style={styles.row}>
           {dias.map((dia, index) => (
             <Text key={index} style={[styles.cell, styles.header]}>
@@ -25,7 +24,6 @@ const HorarioAulas = () => {
           ))}
         </View>
 
-        {/* Linhas de conteúdo */}
         {horario.map((linha, rowIndex) => (
           <View key={rowIndex} style={styles.row}>
             {linha.map((item, colIndex) => (
