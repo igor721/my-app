@@ -29,13 +29,14 @@ export default function CursosScreen() {
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={
-        <IconSymbol
+        <IconSymbol   //verificar esse componente para alteração de icone na barra
           size={310}
           color="#808080"
           name="chevron.left.forwardslash.chevron.right"
           style={styles.headerImage}
         />
       }>
+      
       <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Lista de Cursos</Text>
       <FlatList
