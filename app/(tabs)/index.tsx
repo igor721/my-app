@@ -24,7 +24,7 @@ export default function HomeScreen() {
       </ThemedView>
   
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">📚 Texto de boas-vindas:</ThemedText>
+        <ThemedText type="subtitle">📚 Boas-vindas:</ThemedText>
         <ThemedText>
           {`É uma alegria receber você em mais um ano de descobertas, crescimento e aprendizado. Aqui, cada dia é uma nova oportunidade de construir conhecimentos, fazer amizades e sonhar com um futuro brilhante. Estamos juntos nessa jornada! 💙 `}
         </ThemedText>
