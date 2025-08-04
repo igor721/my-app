@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Button, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 import CursoModal from '../../components/CursoModal';
 import { Image } from 'expo-image';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
