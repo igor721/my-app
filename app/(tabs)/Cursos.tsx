@@ -53,7 +53,6 @@ export default function CursosScreen() {
         <Button title="Adicionar Curso" onPress={() => setModalVisible(true)} />
       </View>
 
-
       <CursoModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -78,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingVertical: 8,
     borderBottomColor: '#ccc',
+    color: '#ffffff',
     borderBottomWidth: 1,
   },
   buttonContainer: {
