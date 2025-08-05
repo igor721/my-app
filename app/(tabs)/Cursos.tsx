@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Button, Pressable, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CursoModal from '../../components/CursoModal';
 import { Image } from 'expo-image';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -11,6 +12,8 @@ type Curso = {
   nome: string;
 };
 
+const storage_key = 'cursos_salvos';
+
 export default function CursosScreen() {
   const [cursos, setCursos] = useState<Curso[]>([
     { id: 1, nome: 'Engenharia de Software' },
@@ -19,6 +22,33 @@ export default function CursosScreen() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [cursoSelecionado, setCursoSelecionado] = useState<Curso | null>(null);
+
+  useEffect(() => {
+    const carregarCursos = async () => {
+      try {
+        const json = await AsyncStorage.getItem(storage_key);
+        if (json) {
+          setCursos(JSON.parse(json));
+        }
+      } catch (error) {
+        console.error('Erro ao carregar cursos:', error);
+      }
+    };
+
+    carregarCursos();
+  }, []);
+
+  useEffect(() => {
+    const salvarCursos = async () => {
+      try {
+        await AsyncStorage.setItem(storage_key, JSON.stringify(cursos));
+      } catch (error) {
+        console.error('Erro ao salvar cursos:', error);
+      }
+    };
+
+    salvarCursos();
+  }, [cursos]);
 
   const adicionarCurso = (nome: string) => {
     const novoCurso: Curso = { id: Date.now(), nome };
@@ -68,15 +98,13 @@ export default function CursosScreen() {
         </ThemedText>
 
         <ThemedView style={styles.stepContainer}>
-          <FlatList
-            data={cursos}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <Pressable onPress={() => abrirModalParaEditar(item)}>
+          <View>
+            {cursos.map((item) => (
+              <Pressable key={item.id} onPress={() => abrirModalParaEditar(item)}>
                 <Text style={styles.item}>{item.nome}</Text>
               </Pressable>
-            )}
-          />
+            ))}
+          </View>
         </ThemedView>
       </ThemedView>
 
@@ -84,7 +112,7 @@ export default function CursosScreen() {
         <Button
           title="Adicionar Curso"
           onPress={() => {
-            setCursoSelecionado(null); // limpar curso selecionado para criar novo
+            setCursoSelecionado(null);
             setModalVisible(true);
           }}
         />
