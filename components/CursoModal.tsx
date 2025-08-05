@@ -1,38 +1,80 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, View, TextInput, Button, StyleSheet, Text } from 'react-native';
 
-type Props = {
+type Curso = {
+  id: number;
+  nome: string;
+};
+
+type CursoModalProps = {
   visible: boolean;
   onClose: () => void;
   onCreate: (nome: string) => void;
+  onEdit: (id: number, nome: string) => void;
+  onDelete: (id: number) => void;
+  curso: Curso | null;
 };
 
-export default function CursoModal({ visible, onClose, onCreate }: Props) {
+export default function CursoModal({
+  visible,
+  onClose,
+  onCreate,
+  onEdit,
+  onDelete,
+  curso,
+}: CursoModalProps) {
   const [nome, setNome] = useState('');
 
-  const handleCreate = () => {
-    if (nome.trim()) {
-      onCreate(nome.trim());
+  useEffect(() => {
+    if (curso) {
+      setNome(curso.nome);
+    } else {
       setNome('');
+    }
+  }, [curso, visible]);
+
+  const handleSalvar = () => {
+    if (nome.trim() === '') return;
+
+    if (curso) {
+      onEdit(curso.id, nome);
+    } else {
+      onCreate(nome);
+    }
+
+    onClose();
+  };
+
+  const handleExcluir = () => {
+    if (curso) {
+      onDelete(curso.id);
       onClose();
     }
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
-      <View style={styles.overlay}>
-        <View style={styles.modal}>
-          <Text style={styles.title}>Novo Curso</Text>
+    <Modal visible={visible} transparent animationType="slide">
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.title}>
+            {curso ? 'Editar Curso' : 'Adicionar Curso'}
+          </Text>
           <TextInput
+            style={styles.input}
             placeholder="Nome do curso"
             value={nome}
             onChangeText={setNome}
-            style={styles.input}
           />
-          <View style={styles.buttons}>
-            <Button title="Cancelar" onPress={onClose} />
-            <Button title="Salvar" onPress={handleCreate} />
+          <View style={styles.buttonGroup}>
+            <Button title="Cancelar" onPress={onClose} color="#888" />
+            <Button title={curso ? 'Salvar' : 'Adicionar'} onPress={handleSalvar} />
           </View>
+
+          {curso && (
+            <View style={styles.deleteButton}>
+              <Button title="Excluir" color="#D11A2A" onPress={handleExcluir} />
+            </View>
+          )}
         </View>
       </View>
     </Modal>
@@ -40,31 +82,37 @@ export default function CursoModal({ visible, onClose, onCreate }: Props) {
 }
 
 const styles = StyleSheet.create({
-  overlay: {
+  modalOverlay: {
     flex: 1,
-    backgroundColor: '#000000aa',
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     padding: 20,
   },
-  modal: {
+  modalContainer: {
     backgroundColor: '#fff',
-    padding: 20,
     borderRadius: 12,
+    padding: 20,
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
     marginBottom: 12,
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 10,
     borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    fontSize: 16,
     marginBottom: 16,
   },
-  buttons: {
+  buttonGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: 8,
+  },
+  deleteButton: {
+    marginTop: 16,
   },
 });
